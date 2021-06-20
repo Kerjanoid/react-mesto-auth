@@ -61,5 +61,16 @@
 @import url(./blocks/popup/__form-field/popup__form-field.css);
 @import url(./blocks/popup/__submit-button/_disabled/popup__submit-button_disabled.css);
 @import url(./blocks/stop-propagation/stop-propagation.css);
-
-
+@import url(./blocks/header/__button/header__button.css);
+@import url(./blocks/header/__menu/header__menu.css);
+@import url(./blocks/header/__mail/header__mail.css);
+@import url(./blocks/header/__button/_quit/header__button_quit.css);
+@import url(./blocks/register/__title/register__title.css);
+@import url(./blocks/register/__input-field/register__input-field.css);
+@import url(./blocks/register/__button/register__button.css);
+@import url(./blocks/register/__button/_signin/register__button_signin.css);
+@import url(./blocks/register/__login/register__login.css);
+@import url(./blocks/register/__login-text/register__login-text.css);
+@import url(./blocks/register/__link/register__link.css);
+@import url(./blocks/register/__form/register__form.css);
+@import url(./blocks/register/register.css);

@@ -6,10 +6,14 @@ import EditProfilePopup from "./EditProfilePopup"
 import EditAvatarPopup from "./EditAvatarPopup"
 import AddPlacePopup from "./AddPlacePopup"
 import ImagePopup from "./ImagePopup"
-import {useEffect, useState} from "react"
+import Login from "./Login"
+import Register from "./Register"
+import InfoTooltip from "./InfoTooltip"
+import ProtectedRoute from "./ProtectedRoute"
+import { useEffect, useState } from "react"
 import api from "../utils/api"
-import {CurrentUserContext} from '../contexts/CurrentUserContext'
-import {BrowserRouter} from "react-router-dom"
+import { CurrentUserContext } from '../contexts/CurrentUserContext'
+import { Switch, Route } from "react-router-dom"
 
 function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false)
@@ -124,50 +128,64 @@ function App() {
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
-    <BrowserRouter>
       <div className="root">
-        <Header />
-        <Main
-          onEditProfile={handleEditProfileClick}
-          onAddPlace={handleAddPlaceClick}
-          onEditAvatar={handleEditAvatarClick}
-          onCardClick={handleCardClick}
-          onCardLike={handleCardLike}
-          onCardDelete={handleCardDelete}
-          cards={cards}
-        />
+        <Switch>
+          <Route exact path="/">
+            <Header
+              buttonText="Выйти"
+              onHeaderButon={closeAllPopups}
+              buttonClass="header__button_quit"
+              mailHandler="aaaaaa@aaaa.co"
+            />
+            <Main
+              onEditProfile={handleEditProfileClick}
+              onAddPlace={handleAddPlaceClick}
+              onEditAvatar={handleEditAvatarClick}
+              onCardClick={handleCardClick}
+              onCardLike={handleCardLike}
+              onCardDelete={handleCardDelete}
+              cards={cards}
+            />
+            <EditProfilePopup
+              isOpen={isEditProfilePopupOpen}
+              onClose={closeAllPopups}
+              closePopupByClickOutside={closePopupByClickOutside}
+              onUpdateUser={handleUpdateUser}
+              waiting={waiting}
+            >
+            </EditProfilePopup>
+            <EditAvatarPopup
+              isOpen={isEditAvatarPopupOpen}
+              onClose={closeAllPopups}
+              closePopupByClickOutside={closePopupByClickOutside}
+              onUpdateAvatar={handleUpdateAvatar}
+              waiting={waiting}
+            >
+            </EditAvatarPopup>
+            <AddPlacePopup
+              isOpen={isAddPlacePopupOpen}
+              onClose={closeAllPopups}
+              closePopupByClickOutside={closePopupByClickOutside}
+              onAddPlace={handleAddPlaceSubmit}
+              waiting={waiting}
+            >
+            </AddPlacePopup>
+            <ImagePopup
+              onClose={closeAllPopups}
+              card={selectedCard}
+              closePopupByClickOutside={closePopupByClickOutside}
+            />
+
+          </Route>
+          <Route path="/sign-up">
+            <Register />
+          </Route>
+          <Route path="/sign-in">
+            <Login />
+          </Route>
+        </Switch>
         <Footer />
-        <EditProfilePopup
-          isOpen={isEditProfilePopupOpen}
-          onClose={closeAllPopups}
-          closePopupByClickOutside={closePopupByClickOutside}
-          onUpdateUser={handleUpdateUser}
-          waiting={waiting}
-        >
-        </EditProfilePopup>
-        <EditAvatarPopup
-          isOpen={isEditAvatarPopupOpen}
-          onClose={closeAllPopups}
-          closePopupByClickOutside={closePopupByClickOutside}
-          onUpdateAvatar={handleUpdateAvatar}
-          waiting={waiting}
-        >
-        </EditAvatarPopup>
-        <AddPlacePopup
-          isOpen={isAddPlacePopupOpen}
-          onClose={closeAllPopups}
-          closePopupByClickOutside={closePopupByClickOutside}
-          onAddPlace={handleAddPlaceSubmit}
-          waiting={waiting}
-        >
-        </AddPlacePopup>
-        <ImagePopup
-          onClose={closeAllPopups}
-          card={selectedCard}
-          closePopupByClickOutside={closePopupByClickOutside}
-        />
       </div>
-    </BrowserRouter>
     </CurrentUserContext.Provider>
   )
 }

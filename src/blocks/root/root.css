@@ -5,6 +5,7 @@
   align-items: center;
   margin: 0 auto;
   min-width: 320px;
+  min-height: 100vh;
   font-family: "Inter", "Arial", sans-serif;
   color: white;
   background: #000;

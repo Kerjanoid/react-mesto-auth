@@ -10,6 +10,7 @@
   height: 27px;
   outline: none;
   position: relative;
+  background-color: inherit;
 }
 
 .popup__input-field:first-of-type {
