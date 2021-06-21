@@ -10,19 +10,45 @@ import Login from "./Login"
 import Register from "./Register"
 import InfoTooltip from "./InfoTooltip"
 import ProtectedRoute from "./ProtectedRoute"
+import * as Auth from "./Auth"
 import { useEffect, useState } from "react"
 import api from "../utils/api"
 import { CurrentUserContext } from '../contexts/CurrentUserContext'
-import { Switch, Route } from "react-router-dom"
+import { Switch, Route, useHistory } from "react-router-dom"
 
 function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false)
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false)
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false)
+  const [isInfoPopupOpen, setIsInfoPopupOpen] = useState(false)
   const [currentUser, setCurrentUser] = useState({})
-  const [selectedCard, setSelectedCard] = useState({isOpened: false})
+  const [selectedCard, setSelectedCard] = useState(false)
   const [cards, setCards] = useState([])
   const [waiting, setWaiting] = useState(null)
+  const [loggedIn, setLoggedIn] = useState(false)
+  const [userEmail, setUserEmail] = useState({email: ''})
+  const history = useHistory()
+
+  useEffect(() => {
+    tokenCheck()
+  }, [])
+
+  const tokenCheck = () => {
+    const jwt = localStorage.getItem('jwt');
+
+    if (jwt){
+      Auth.checkToken(jwt).then((res) => {
+        if (res.email) {
+          setUserEmail({
+            email: res.email
+          });
+          setLoggedIn(true);
+          history.push('/');
+        }
+      });
+    }
+  }
+  // ПРОДОЛЖИТЬ ОТСЕДОВА!!!!
 
   useEffect(() => {
     api.getUserInformation().then((userData) => {
@@ -48,6 +74,9 @@ function App() {
   }
   function handleAddPlaceClick() {
     setIsAddPlacePopupOpen(!isAddPlacePopupOpen)
+  }
+  function handleInfoPopup() {
+    setIsInfoPopupOpen(!isInfoPopupOpen)
   }
 
   //Обработчик информации о пользователе
@@ -116,6 +145,7 @@ function App() {
     setIsEditProfilePopupOpen(false)
     setIsAddPlacePopupOpen(false)
     setIsEditAvatarPopupOpen(false)
+    setIsInfoPopupOpen(false)
     setSelectedCard({isOpened: false})
   }
 
@@ -130,60 +160,56 @@ function App() {
     <CurrentUserContext.Provider value={currentUser}>
       <div className="root">
         <Switch>
-          <Route exact path="/">
-            <Header
-              buttonText="Выйти"
-              onHeaderButon={closeAllPopups}
-              buttonClass="header__button_quit"
-              mailHandler="aaaaaa@aaaa.co"
-            />
-            <Main
-              onEditProfile={handleEditProfileClick}
-              onAddPlace={handleAddPlaceClick}
-              onEditAvatar={handleEditAvatarClick}
-              onCardClick={handleCardClick}
-              onCardLike={handleCardLike}
-              onCardDelete={handleCardDelete}
-              cards={cards}
-            />
-            <EditProfilePopup
-              isOpen={isEditProfilePopupOpen}
-              onClose={closeAllPopups}
-              closePopupByClickOutside={closePopupByClickOutside}
-              onUpdateUser={handleUpdateUser}
-              waiting={waiting}
-            >
-            </EditProfilePopup>
-            <EditAvatarPopup
-              isOpen={isEditAvatarPopupOpen}
-              onClose={closeAllPopups}
-              closePopupByClickOutside={closePopupByClickOutside}
-              onUpdateAvatar={handleUpdateAvatar}
-              waiting={waiting}
-            >
-            </EditAvatarPopup>
-            <AddPlacePopup
-              isOpen={isAddPlacePopupOpen}
-              onClose={closeAllPopups}
-              closePopupByClickOutside={closePopupByClickOutside}
-              onAddPlace={handleAddPlaceSubmit}
-              waiting={waiting}
-            >
-            </AddPlacePopup>
-            <ImagePopup
-              onClose={closeAllPopups}
-              card={selectedCard}
-              closePopupByClickOutside={closePopupByClickOutside}
-            />
-
-          </Route>
-          <Route path="/sign-up">
+          <ProtectedRoute exact path="/"
+            // loggedIn={loggedIn}
+            component={Main}
+            // onSignOut={onSignOut}
+            onHeaderButton= {closeAllPopups}
+            onEditProfile={handleEditProfileClick}
+            onAddPlace={handleAddPlaceClick}
+            onEditAvatar={handleEditAvatarClick}
+            onCardClick={handleCardClick}
+            onCardLike={handleCardLike}
+            onCardDelete={handleCardDelete}
+            cards={cards} />
+          <Route exact path="/sign-up">
             <Register />
           </Route>
-          <Route path="/sign-in">
+          <Route exact path="/sign-in">
             <Login />
           </Route>
         </Switch>
+
+        <EditProfilePopup
+          isOpen={isEditProfilePopupOpen}
+          onClose={closeAllPopups}
+          closePopupByClickOutside={closePopupByClickOutside}
+          onUpdateUser={handleUpdateUser}
+          waiting={waiting} />
+
+        <EditAvatarPopup
+          isOpen={isEditAvatarPopupOpen}
+          onClose={closeAllPopups}
+          closePopupByClickOutside={closePopupByClickOutside}
+          onUpdateAvatar={handleUpdateAvatar}
+          waiting={waiting} />
+
+        <AddPlacePopup
+          isOpen={isAddPlacePopupOpen}
+          onClose={closeAllPopups}
+          closePopupByClickOutside={closePopupByClickOutside}
+          onAddPlace={handleAddPlaceSubmit}
+          waiting={waiting} />
+
+        <ImagePopup
+          onClose={closeAllPopups}
+          card={selectedCard}
+          closePopupByClickOutside={closePopupByClickOutside} />
+
+        <InfoTooltip
+          onClose={closeAllPopups}
+          isOpen={isInfoPopupOpen}
+          closePopupByClickOutside={closePopupByClickOutside} />
         <Footer />
       </div>
     </CurrentUserContext.Provider>

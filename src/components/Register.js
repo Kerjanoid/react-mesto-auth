@@ -1,5 +1,5 @@
 import Header from "./Header"
-import { Link } from "react-router-dom"
+import { Link, Redirect } from "react-router-dom"
 
 function Register() {
   return (
@@ -7,7 +7,7 @@ function Register() {
     <Header
       buttonText="Войти"
       mailHandler=""
-      // onHeaderButton={closeAllPopups}
+      linkHandler={"/sign-in"}
       buttonClass=""
     />
     <section className="register">
@@ -37,7 +37,7 @@ function Register() {
       </form>
       <div className="register__login">
         <p className="register__login-text">Уже зарегистрированы?&nbsp;</p>
-        <Link to="/register" className="register__link">Войти</Link>
+        <Link to="/sign-in" className="register__link">Войти</Link>
       </div>
     </section>
     </>

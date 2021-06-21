@@ -32,7 +32,6 @@ function AddPlacePopup ({isOpen, onClose, closePopupByClickOutside, onAddPlace, 
     buttonText={waiting || 'Добавить'}
     handleSubmit={handleSubmit}
     >
-      <label className="popup__form-field">
         <input className="popup__input-field popup__input-field_type_pic-title"
         required
         placeholder="Название"
@@ -43,9 +42,6 @@ function AddPlacePopup ({isOpen, onClose, closePopupByClickOutside, onAddPlace, 
         onChange={handleNameChange}
         value={name}
         />
-        <span className="popup__error" id="picture-title-error" />
-      </label>
-      <label className="popup__form-field">
         <input
         className="popup__input-field popup__input-field_type_pic-link"
         required
@@ -57,8 +53,6 @@ function AddPlacePopup ({isOpen, onClose, closePopupByClickOutside, onAddPlace, 
         onChange={handleLinkChange}
         value={link}
         />
-        <span className="popup__error" id="picture-url-error" />
-      </label>
     </PopupWithForm>
   )
 }

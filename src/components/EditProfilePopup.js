@@ -37,7 +37,6 @@ function EditProfilePopup ({isOpen, onClose, closePopupByClickOutside, onUpdateU
       handleSubmit={handleSubmit}
       buttonText={waiting || 'Сохранить'}
       >
-        <label className="popup__form-field">
           <input className="popup__input-field popup__input-field_type_title"
           required
           placeholder="Введите имя"
@@ -48,9 +47,6 @@ function EditProfilePopup ({isOpen, onClose, closePopupByClickOutside, onUpdateU
           onChange={handleNameChange}
           value={name || ''}
           />
-          <span className="popup__error" id="profile-title-error" />
-        </label>
-        <label className="popup__form-field">
           <input
           className="popup__input-field popup__input-field_type_subtitle"
           required
@@ -62,8 +58,6 @@ function EditProfilePopup ({isOpen, onClose, closePopupByClickOutside, onUpdateU
           onChange={handleAboutChange}
           value={about || ''}
           />
-          <span className="popup__error" id="profile-subtitle-error" />
-        </label>
     </PopupWithForm>
   )
 }

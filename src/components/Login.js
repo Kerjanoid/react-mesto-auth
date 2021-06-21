@@ -6,7 +6,7 @@ function Login() {
     <Header
       buttonText="Регистрация"
       mailHandler=""
-      // onHeaderButton={closeAllPopups}
+      linkHandler={"/sign-up"}
       buttonClass=""
     />
     <section className="register">
