@@ -1,18 +1,40 @@
 import Header from "./Header"
-import { Link, Redirect } from "react-router-dom"
+import { Link, useHistory } from "react-router-dom"
+import { useState }  from 'react';
 
-function Register() {
+const Register = ({handleRegister}) => {
+  const [data, setData] = useState({
+    email: '',
+    password: ''
+  })
+
+  const history = useHistory()
+
+  const handleChange = (e) => {
+    const {name, value} = e.target;
+    setData({
+      ...data,
+      [name]: value
+    })
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const { email, password } = data
+    handleRegister(email, password)
+  }
+
   return (
     <>
     <Header
       buttonText="Войти"
       mailHandler=""
-      linkHandler={"/sign-in"}
+      linkHandler={() => history.push('/sign-in')}
       buttonClass=""
     />
     <section className="register">
       <h2 className="popup__title register__title">Регистрация</h2>
-      <form className="popup__form register__form">
+      <form className="popup__form register__form" onSubmit={handleSubmit}>
           <input
             required
             name="email"
@@ -21,7 +43,8 @@ function Register() {
             placeholder="Email"
             minLength="7"
             maxLength="40"
-          // value={data.username} onChange={handleChange}
+            value={data.email}
+            onChange={handleChange}
           />
           <input
             required
@@ -31,7 +54,8 @@ function Register() {
             placeholder="Пароль"
             minLength="5"
             maxLength="40"
-            // value={data.password} onChange={handleChange}
+            value={data.password}
+            onChange={handleChange}
           />
         <button type="submit" className="popup__submit-button register__button" aria-label="Зарегистрироваться">Зарегистрироваться</button>
       </form>

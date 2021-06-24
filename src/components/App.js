@@ -26,7 +26,7 @@ function App() {
   const [cards, setCards] = useState([])
   const [waiting, setWaiting] = useState(null)
   const [loggedIn, setLoggedIn] = useState(false)
-  const [userEmail, setUserEmail] = useState({email: ''})
+  const [userEmail, setUserEmail] = useState('')
   const history = useHistory()
 
   useEffect(() => {
@@ -34,24 +34,47 @@ function App() {
   }, [])
 
   const tokenCheck = () => {
-    const jwt = localStorage.getItem('jwt');
-
-    if (jwt){
-      Auth.checkToken(jwt).then((res) => {
-        if (res.email) {
-          setUserEmail({
-            email: res.email
-          });
-          setLoggedIn(true);
-          history.push('/');
+    const jwt = localStorage.getItem('jwt')
+    if (jwt) {
+      Auth.getToken(jwt).then((res) => {
+        if (res.data.email) {
+          setUserEmail(res.data.email)
+          setLoggedIn(true)
+          history.push('/')
         }
-      });
+      })
+      .catch(err => console.log(err))
     }
   }
-  // ПРОДОЛЖИТЬ ОТСЕДОВА!!!!
+
+  const handleRegister = (email, password) => {
+    Auth.register(email, password)
+    .then(history.push('/sign-in'))
+      .catch(err => console.log(err))
+  }
+
+  const handleLogin = (email, password) => {
+    Auth.login(email, password)
+      .then(res => {
+        if (res.token) {
+          localStorage.setItem('jwt', res.token)
+          setUserEmail(email)
+          setLoggedIn(true)
+          history.push('/')
+        }
+      })
+      .catch(err => console.log(err))
+  }
+
+  const onSignOut = () => {
+    localStorage.removeItem('jwt')
+    setLoggedIn(false)
+    setUserEmail('')
+  }
 
   useEffect(() => {
-    api.getUserInformation().then((userData) => {
+    api.getUserInformation()
+    .then((userData) => {
       setCurrentUser(userData)
     })
     .catch(err => console.log(err))
@@ -66,16 +89,16 @@ function App() {
   }, [])
 
   //Обработчики открытия попапов
-  function handleEditAvatarClick() {
+  const handleEditAvatarClick = () => {
     setIsEditAvatarPopupOpen(!isEditAvatarPopupOpen)
   }
-  function handleEditProfileClick() {
+  const handleEditProfileClick = () => {
     setIsEditProfilePopupOpen(!isEditProfilePopupOpen)
   }
-  function handleAddPlaceClick() {
+  const handleAddPlaceClick = () => {
     setIsAddPlacePopupOpen(!isAddPlacePopupOpen)
   }
-  function handleInfoPopup() {
+  const handleInfoPopup = () => {
     setIsInfoPopupOpen(!isInfoPopupOpen)
   }
 
@@ -161,9 +184,10 @@ function App() {
       <div className="root">
         <Switch>
           <ProtectedRoute exact path="/"
-            // loggedIn={loggedIn}
+            loggedIn={loggedIn}
             component={Main}
-            // onSignOut={onSignOut}
+            mailHandler={userEmail}
+            onSignOut={onSignOut}
             onHeaderButton= {closeAllPopups}
             onEditProfile={handleEditProfileClick}
             onAddPlace={handleAddPlaceClick}
@@ -172,11 +196,11 @@ function App() {
             onCardLike={handleCardLike}
             onCardDelete={handleCardDelete}
             cards={cards} />
-          <Route exact path="/sign-up">
-            <Register />
+          <Route path="/sign-up">
+            <Register handleRegister={handleRegister} />
           </Route>
-          <Route exact path="/sign-in">
-            <Login />
+          <Route path="/sign-in">
+            <Login handleLogin={handleLogin} />
           </Route>
         </Switch>
 

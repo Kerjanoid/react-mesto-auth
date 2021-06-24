@@ -5,7 +5,7 @@ import Card from "./Card"
 import Header from "./Header"
 import {CurrentUserContext} from '../contexts/CurrentUserContext';
 
-const Main = ({onEditProfile, onAddPlace, onEditAvatar, onCardClick, onCardLike, onCardDelete, cards, onHeaderButton}) => {
+const Main = ({onSignOut, mailHandler, onEditProfile, onAddPlace, onEditAvatar, onCardClick, onCardLike, onCardDelete, cards, onHeaderButton}) => {
   const {name, avatar, about} = useContext(CurrentUserContext)
 
   return (
@@ -13,8 +13,8 @@ const Main = ({onEditProfile, onAddPlace, onEditAvatar, onCardClick, onCardLike,
     <Header
       buttonText="Выйти"
       onHeaderButton={onHeaderButton}
-      linkHandler={"/sign-in"}
-      mailHandler="aaaaaa@aaaa.co" />
+      linkHandler={onSignOut}
+      mailHandler={mailHandler} />
     <main className="content">
       <section className="profile">
         <div className="profile__data">

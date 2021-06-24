@@ -6,7 +6,7 @@ function Header({buttonText, linkHandler, buttonClass, mailHandler}) {
       <Link className="header__logo" to="/" />
       <div className="header__menu">
         <p className="header__mail">{mailHandler}</p>
-        <Link className={`header__button ${buttonClass}`} to={linkHandler} >{buttonText}</Link>
+        <button className={`header__button ${buttonClass}`} onClick={linkHandler} >{buttonText}</button>
       </div>
     </header>
   )
