@@ -2,7 +2,7 @@ import Header from "./Header"
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-const Login = ({ handleLogin }) => {
+const Login = ({ handleLogin, waiting }) => {
   const [data, setData] = useState({
     email: '',
     password: '',
@@ -41,7 +41,7 @@ const Login = ({ handleLogin }) => {
             type="email"
             className="register__input-field register__input-field_type_email"
             placeholder="Email"
-            minLength="7"
+            minLength="5"
             maxLength="40"
             value={data.email}
             onChange={handleChange}
@@ -52,12 +52,12 @@ const Login = ({ handleLogin }) => {
             type="password"
             className=" register__input-field register__input-field_type_password"
             placeholder="Пароль"
-            minLength="5"
+            minLength="1"
             maxLength="40"
             value={data.password}
             onChange={handleChange}
           />
-        <button type="submit" className="popup__submit-button register__button register__button_signin" aria-label="Войти">Войти</button>
+        <button type="submit" className="popup__submit-button register__button register__button_signin" aria-label={waiting || 'Войти'}>{waiting || 'Войти'}</button>
       </form>
     </section>
     </>

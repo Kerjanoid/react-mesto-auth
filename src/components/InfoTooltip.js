@@ -1,8 +1,6 @@
 import closeButton from "../images/Close_Icon.svg"
-import doneImage from "../images/done.svg"
-import nopeImage from "../images/nope.svg"
 
-function InfoTooltip({ isOpen, closePopupByClickOutside, onClose }) {
+function InfoTooltip({ isOpen, closePopupByClickOutside, onClose, infoPic, infoText }) {
   return (
     <div className={`popup popup_info ${isOpen ? "popup_opened" : ""}`}
     onMouseUp={closePopupByClickOutside}>
@@ -18,10 +16,10 @@ function InfoTooltip({ isOpen, closePopupByClickOutside, onClose }) {
         />
       </button>
       <img className="popup__result-img"
-        src={doneImage}
+        src={infoPic}
         alt="закрыть"
       />
-      <h2 className="popup__result-text">Вы успешно зарегистрировались!</h2>
+      <h2 className="popup__result-text">{infoText}</h2>
       </div>
     </div>
     )

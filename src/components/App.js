@@ -1,5 +1,4 @@
 import "../index.css"
-import Header from "./Header"
 import Main from "./Main"
 import Footer from "./Footer"
 import EditProfilePopup from "./EditProfilePopup"
@@ -10,7 +9,9 @@ import Login from "./Login"
 import Register from "./Register"
 import InfoTooltip from "./InfoTooltip"
 import ProtectedRoute from "./ProtectedRoute"
-import * as Auth from "./Auth"
+import doneImage from "../images/done.svg"
+import nopeImage from "../images/nope.svg"
+import * as Auth from "../utils/auth"
 import { useEffect, useState } from "react"
 import api from "../utils/api"
 import { CurrentUserContext } from '../contexts/CurrentUserContext'
@@ -27,6 +28,8 @@ function App() {
   const [waiting, setWaiting] = useState(null)
   const [loggedIn, setLoggedIn] = useState(false)
   const [userEmail, setUserEmail] = useState('')
+  const [infoPic, setInfoPic] = useState(null)
+  const [infoText, setInfoText] = useState(null)
   const history = useHistory()
 
   useEffect(() => {
@@ -36,7 +39,7 @@ function App() {
   const tokenCheck = () => {
     const jwt = localStorage.getItem('jwt')
     if (jwt) {
-      Auth.getToken(jwt).then((res) => {
+      Auth.getToken(jwt).then(res => {
         if (res.data.email) {
           setUserEmail(res.data.email)
           setLoggedIn(true)
@@ -48,12 +51,26 @@ function App() {
   }
 
   const handleRegister = (email, password) => {
+    setWaiting('Регистрация...')
     Auth.register(email, password)
-    .then(history.push('/sign-in'))
-      .catch(err => console.log(err))
+    .then(res => {
+      if (res.data.email) {
+        setInfoText('Вы успешно зарегистрировались!')
+        setInfoPic(doneImage)
+        handleInfoPopup()
+        setTimeout(() => {
+          handleLogin(email, password);
+        }, 500)}
+      })
+    .catch(err => {console.log(err)
+    setInfoText('Что-то пошло не так! Попробуйте ещё раз.')
+    setInfoPic(nopeImage)
+    handleInfoPopup()})
+    .finally(() => {setWaiting(null)})
   }
 
   const handleLogin = (email, password) => {
+    setWaiting('Вход...')
     Auth.login(email, password)
       .then(res => {
         if (res.token) {
@@ -64,6 +81,7 @@ function App() {
         }
       })
       .catch(err => console.log(err))
+      .finally(() => {setWaiting(null)})
   }
 
   const onSignOut = () => {
@@ -197,10 +215,12 @@ function App() {
             onCardDelete={handleCardDelete}
             cards={cards} />
           <Route path="/sign-up">
-            <Register handleRegister={handleRegister} />
+            <Register handleRegister={handleRegister}
+            waiting={waiting} />
           </Route>
           <Route path="/sign-in">
-            <Login handleLogin={handleLogin} />
+            <Login handleLogin={handleLogin}
+            waiting={waiting} />
           </Route>
         </Switch>
 
@@ -233,7 +253,9 @@ function App() {
         <InfoTooltip
           onClose={closeAllPopups}
           isOpen={isInfoPopupOpen}
-          closePopupByClickOutside={closePopupByClickOutside} />
+          closePopupByClickOutside={closePopupByClickOutside}
+          infoPic={infoPic}
+          infoText={infoText} />
         <Footer />
       </div>
     </CurrentUserContext.Provider>

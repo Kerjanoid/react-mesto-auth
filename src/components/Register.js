@@ -2,7 +2,7 @@ import Header from "./Header"
 import { Link, useHistory } from "react-router-dom"
 import { useState }  from 'react';
 
-const Register = ({handleRegister}) => {
+const Register = ({handleRegister, waiting}) => {
   const [data, setData] = useState({
     email: '',
     password: ''
@@ -41,7 +41,7 @@ const Register = ({handleRegister}) => {
             type="email"
             className="register__input-field register__input-field_type_email"
             placeholder="Email"
-            minLength="7"
+            minLength="5"
             maxLength="40"
             value={data.email}
             onChange={handleChange}
@@ -52,16 +52,16 @@ const Register = ({handleRegister}) => {
             type="password"
             className=" register__input-field register__input-field_type_password"
             placeholder="Пароль"
-            minLength="5"
+            minLength="1"
             maxLength="40"
             value={data.password}
             onChange={handleChange}
           />
-        <button type="submit" className="popup__submit-button register__button" aria-label="Зарегистрироваться">Зарегистрироваться</button>
+        <button type="submit" className="popup__submit-button register__button" aria-label={waiting || 'Зарегистрироваться'}>{waiting || 'Зарегистрироваться'}</button>
       </form>
       <div className="register__login">
         <p className="register__login-text">Уже зарегистрированы?&nbsp;</p>
-        <Link to="/sign-in" className="register__link">Войти</Link>
+        <Link to="/sign-in" className="register__link" aria-label='Войти'>Войти</Link>
       </div>
     </section>
     </>
