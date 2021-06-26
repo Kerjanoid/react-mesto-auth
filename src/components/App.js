@@ -23,7 +23,11 @@ function App() {
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false)
   const [isInfoPopupOpen, setIsInfoPopupOpen] = useState(false)
   const [currentUser, setCurrentUser] = useState({})
-  const [selectedCard, setSelectedCard] = useState(false)
+  const [selectedCard, setSelectedCard] = useState({
+    link: '',
+    name: '',
+    isOpened: false
+  })
   const [cards, setCards] = useState([])
   const [waiting, setWaiting] = useState(null)
   const [loggedIn, setLoggedIn] = useState(false)
@@ -175,9 +179,9 @@ function App() {
   //Обработчик клика по карточке
   const handleCardClick = ({link, name, isOpened}) => {
     setSelectedCard({
-    link,
-    name,
-    isOpened: !isOpened,
+      link: link,
+      name: name,
+      isOpened: !isOpened,
     })
   }
 
@@ -187,7 +191,11 @@ function App() {
     setIsAddPlacePopupOpen(false)
     setIsEditAvatarPopupOpen(false)
     setIsInfoPopupOpen(false)
-    setSelectedCard({isOpened: false})
+    setSelectedCard({
+      link: '',
+      name: '',
+      isOpened: false,
+    })
   }
 
   //Закрытие попапа по клику вне формы
