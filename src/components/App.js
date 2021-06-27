@@ -15,7 +15,7 @@ import * as Auth from "../utils/auth"
 import { useEffect, useState } from "react"
 import api from "../utils/api"
 import { CurrentUserContext } from '../contexts/CurrentUserContext'
-import { Switch, Route, useHistory } from "react-router-dom"
+import { Switch, Route, useHistory, Redirect } from "react-router-dom"
 
 function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false)
@@ -229,6 +229,9 @@ function App() {
           <Route path="/sign-in">
             <Login handleLogin={handleLogin}
             waiting={waiting} />
+          </Route>
+          <Route path="*">
+            {loggedIn ? <Redirect to="/" /> : <Redirect to="/sign-in" />}
           </Route>
         </Switch>
 
