@@ -231,7 +231,7 @@ function App() {
             waiting={waiting} />
           </Route>
           <Route path="*">
-            {loggedIn ? <Redirect to="/" /> : <Redirect to="/sign-in" />}
+            <Redirect to="/" />
           </Route>
         </Switch>
 
